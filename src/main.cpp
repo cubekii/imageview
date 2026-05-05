@@ -38,10 +38,14 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
                 content.zoomout(50);
             // moving
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT)
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
                 dragging = true;
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT)
+                SDL_HideCursor();
+            }
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
                 dragging = false;
+                SDL_ShowCursor();
+            }
 
             if (dragging) {
                 float x, y;

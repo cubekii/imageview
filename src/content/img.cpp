@@ -54,8 +54,8 @@ void img::zoomout(const float& speed) {
 }
 
 void img::place_to(const int& x, const int& y) {
-    rect.x = x;
-    rect.y = y;
+    rect.x = x - rect.w/2.0f;
+    rect.y = y - rect.h/2.0f;
 }
 
 img::~img() {
