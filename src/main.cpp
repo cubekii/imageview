@@ -8,7 +8,12 @@ int main() {
         SDL_WINDOW_ALWAYS_ON_TOP |
         SDL_WINDOW_TRANSPARENT;
 
-    SDL_Window* window = SDL_CreateWindow("", 300, 300, flags);
+    SDL_DisplayID display = SDL_GetPrimaryDisplay();
+    SDL_Rect bounds;
+    SDL_GetDisplayBounds(display, &bounds);
+
+    SDL_Window* window = SDL_CreateWindow("", bounds.w, bounds.h, flags);
+
     SDL_SetWindowPosition(window, 0, 0);
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
@@ -25,7 +30,7 @@ int main() {
         }
 
         // Transparent background (alpha = 0)
-        SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
         // Red square
