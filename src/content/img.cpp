@@ -18,6 +18,16 @@ img::img(SDL_Renderer* renderer, std::string url) {
     };
 }
 
+void img::zoomin() {
+    rect.w+=10.0f;
+    rect.h+=10.0f;
+}
+
+void img::zoomout() {
+    rect.w-=10.0f;
+    rect.h-=10.0f;
+}
+
 img::~img() {
     SDL_DestroyTexture(texture);
 }

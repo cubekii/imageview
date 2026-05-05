@@ -24,18 +24,24 @@ int main(int argv, char** argc) {
     bool running = true;
     SDL_Event event;
 
+    auto content = img(renderer,"C:\\Users\\temal\\Downloads\\avatar.png");
     while (running) {
+
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) running = false;
             if (event.type == SDL_EVENT_KEY_DOWN &&
                 event.key.key == SDLK_ESCAPE) running = false;
+            if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y > 0)
+                content.zoomin();
+            if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
+                content.zoomout();
+
         }
 
         // Transparent background (alpha = 0)
         SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
-        auto content = img(renderer,"C:\\Users\\temal\\Downloads\\avatar.png");
         content.put_image(renderer);
 
         SDL_RenderPresent(renderer);

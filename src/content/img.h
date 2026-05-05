@@ -10,6 +10,8 @@ private:
     SDL_FRect rect;
 public:
     img(SDL_Renderer* renderer,std::string url);
+    void zoomin();
+    void zoomout();
     ~img();
     void put_image(SDL_Renderer* renderer);
 };
