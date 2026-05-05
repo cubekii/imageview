@@ -53,6 +53,11 @@ void img::zoomout(const float& speed) {
     rect.h-=speed;
 }
 
+void img::place_to(const int& x, const int& y) {
+    rect.x = x;
+    rect.y = y;
+}
+
 img::~img() {
     SDL_DestroyTexture(texture);
 }

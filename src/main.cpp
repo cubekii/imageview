@@ -31,11 +31,19 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_QUIT) running = false;
             if (event.type == SDL_EVENT_KEY_DOWN &&
                 event.key.key == SDLK_ESCAPE) running = false;
+            // zooming
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y > 0)
                 content.zoomin(50);
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
                 content.zoomout(50);
 
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    float x,y;
+                    SDL_GetMouseState(&x,&y);
+                    content.place_to(x,y);
+                }
+            }
         }
 
         // Transparent background (alpha = 0)
