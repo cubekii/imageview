@@ -32,9 +32,9 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_KEY_DOWN &&
                 event.key.key == SDLK_ESCAPE) running = false;
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y > 0)
-                content.zoomin();
+                content.zoomin(50);
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
-                content.zoomout();
+                content.zoomout(50);
 
         }
 

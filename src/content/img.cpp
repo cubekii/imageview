@@ -18,14 +18,39 @@ img::img(SDL_Renderer* renderer, std::string url) {
     };
 }
 
+bool img::is_avaliable_size(const float &size) {
+    return rect.h-size > 0.0f || rect.w-size > 0.0f;
+}
+
 void img::zoomin() {
+    rect.x-=5.0f;
+    rect.y-=5.0f;
     rect.w+=10.0f;
     rect.h+=10.0f;
 }
 
 void img::zoomout() {
+    if (!img::is_avaliable_size(10.0f))
+        return;
+    rect.x+=5.0f;
+    rect.y+=5.0f;
     rect.w-=10.0f;
     rect.h-=10.0f;
+}
+
+void img::zoomin(const float& speed) {
+    rect.x-=speed/2.0f;
+    rect.y-=speed/2.0f;
+    rect.w+=speed;
+    rect.h+=speed;
+}
+void img::zoomout(const float& speed) {
+    if (!img::is_avaliable_size(10.0f))
+        return;
+    rect.x+=speed/2.0f;
+    rect.y+=speed/2.0f;
+    rect.w-=speed;
+    rect.h-=speed;
 }
 
 img::~img() {

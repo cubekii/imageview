@@ -12,7 +12,11 @@ public:
     img(SDL_Renderer* renderer,std::string url);
     void zoomin();
     void zoomout();
+    void zoomin(const float& speed);
+    void zoomout(const float& speed);
     ~img();
     void put_image(SDL_Renderer* renderer);
+private:
+    bool is_avaliable_size(const float& size);
 };
 
