@@ -26,6 +26,7 @@ int main(int argv, char** argc) {
 
     auto content = img(renderer,"C:\\Users\\temal\\Downloads\\avatar.png");
     bool dragging = false;
+    float rel_x, rel_y;
     while (running) {
 
         while (SDL_PollEvent(&event)) {
@@ -38,19 +39,22 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
                 content.zoomout(50);
             // moving
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT && !dragging) {
                 dragging = true;
-                SDL_HideCursor();
+                SDL_GetMouseState(&rel_x, &rel_y);
+                //SDL_HideCursor();
             }
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT && dragging) {
                 dragging = false;
-                SDL_ShowCursor();
+                //rel_x = 0;
+                //rel_y = 0;
+                //SDL_ShowCursor();
             }
 
             if (dragging) {
                 float x, y;
                 SDL_GetMouseState(&x, &y);
-                content.place_to(x, y);
+                content.place_to(x, y,static_cast<int>(rel_x), static_cast<int>(rel_y));
             }
         }
 

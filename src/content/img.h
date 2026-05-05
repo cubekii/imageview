@@ -10,15 +10,17 @@ private:
     SDL_FRect rect;
 public:
     img(SDL_Renderer* renderer,std::string url);
+    ~img();
 
     void zoomin();
     void zoomout();
     void zoomin(const float& speed);
     void zoomout(const float& speed);
 
-    void place_to(const int& x, const int& y);
-    ~img();
+    void place_to(const int& x, const int& y, const int& rel_x, const int& rel_y);
     void put_image(SDL_Renderer* renderer);
+
+    bool in_image_box(const int& x, const int& y);
 private:
     bool is_avaliable_size(const float& size);
 };

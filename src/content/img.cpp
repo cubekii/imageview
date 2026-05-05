@@ -45,7 +45,7 @@ void img::zoomin(const float& speed) {
     rect.h+=speed;
 }
 void img::zoomout(const float& speed) {
-    if (!img::is_avaliable_size(10.0f))
+    if (!is_avaliable_size(10.0f))
         return;
     rect.x+=speed/2.0f;
     rect.y+=speed/2.0f;
@@ -53,9 +53,17 @@ void img::zoomout(const float& speed) {
     rect.h-=speed;
 }
 
-void img::place_to(const int& x, const int& y) {
-    rect.x = x - rect.w/2.0f;
-    rect.y = y - rect.h/2.0f;
+void img::place_to(const int& x, const int& y, const int& rel_x, const int& rel_y) {
+    if (!in_image_box(x,y))
+        return;
+    rect.x = x - rel_x;
+    rect.y = y - rel_y;
+}
+
+bool img::in_image_box(const int&x, const int&y) {
+    float imgW, imgH;
+    SDL_GetTextureSize(texture, &imgW, &imgH);
+    return ((rect.x <= x && rect.x + rect.w >= x) && (rect.y <= y && rect.y + rect.h >= y));
 }
 
 img::~img() {
