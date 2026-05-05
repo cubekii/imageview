@@ -40,6 +40,7 @@ int main(int argv, char** argc) {
             // moving
             if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
                 event.button.button == SDL_BUTTON_LEFT && !dragging) {
+                SDL_HideCursor();
                 float mx, my;
                 SDL_GetMouseState(&mx, &my);
                 if (content.in_image_box(mx, my)) {
@@ -50,6 +51,7 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_MOUSE_BUTTON_UP &&
                 event.button.button == SDL_BUTTON_LEFT && dragging) {
                 dragging = false;
+                SDL_ShowCursor();
             }
 
             if (dragging) {
