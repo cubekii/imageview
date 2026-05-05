@@ -42,13 +42,14 @@ int main(int argv, char** argc) {
             if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT && !dragging) {
                 dragging = true;
                 SDL_GetMouseState(&rel_x, &rel_y);
-                //SDL_HideCursor();
+                if (content.in_image_box(rel_x,rel_y))
+                    SDL_HideCursor();
             }
             if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT && dragging) {
                 dragging = false;
                 //rel_x = 0;
                 //rel_y = 0;
-                //SDL_ShowCursor();
+                SDL_ShowCursor();
             }
 
             if (dragging) {
