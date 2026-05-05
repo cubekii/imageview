@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
+#include <context/image.h>
 
-int main() {
+int main(int argv, char** argc) {
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_WindowFlags flags =
