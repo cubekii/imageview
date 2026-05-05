@@ -35,7 +35,13 @@ int main() {
 
         // Red square
         SDL_SetRenderDrawColorFloat(renderer, 1.0f, 0.2f, 0.2f, 1.0f);
-        SDL_FRect rect = { 100, 100, 100, 100 };
+        float squareSize = 100.0f;
+        SDL_FRect rect = {
+            (bounds.w - squareSize) / 2.0f,
+            (bounds.h - squareSize) / 2.0f,
+            squareSize,
+            squareSize
+        };
         SDL_RenderFillRect(renderer, &rect);
 
         SDL_RenderPresent(renderer);
