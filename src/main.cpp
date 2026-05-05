@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
-#include <context/image.h>
+#include <SDL3_image/SDL_image.h>
+//#include <context/image.h>
 
 int main(int argv, char** argc) {
     SDL_Init(SDL_INIT_VIDEO);
@@ -34,16 +35,21 @@ int main(int argv, char** argc) {
         SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
-        // Red square
-        SDL_SetRenderDrawColorFloat(renderer, 1.0f, 0.2f, 0.2f, 1.0f);
-        float squareSize = 100.0f;
+
+        SDL_Texture* texture = IMG_LoadTexture(renderer, "C:\\Users\\temal\\Downloads\\avatar.png");
+
+        // Get image size
+        float imgW, imgH;
+        SDL_GetTextureSize(texture, &imgW, &imgH);
+
+        // In the render loop, replace the rect drawing with:
         SDL_FRect rect = {
-            (bounds.w - squareSize) / 2.0f,
-            (bounds.h - squareSize) / 2.0f,
-            squareSize,
-            squareSize
+            (bounds.w - imgW) / 2.0f,
+            (bounds.h - imgH) / 2.0f,
+            imgW,
+            imgH
         };
-        SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderTexture(renderer, texture, nullptr, &rect);
 
         SDL_RenderPresent(renderer);
     }
