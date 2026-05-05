@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.h)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.h)
 add_executable(imageview ${SOURCES})
 
 target_link_libraries(imageview PRIVATE
