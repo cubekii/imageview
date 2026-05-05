@@ -15,51 +15,50 @@ int main(int argv, char** argc) {
     SDL_GetDisplayBounds(display, &bounds);
 
     SDL_Window* window = SDL_CreateWindow("", bounds.w, bounds.h, flags);
-
     SDL_SetWindowPosition(window, 0, 0);
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
-    //SDL_SetRenderVSync(renderer, 1);
 
     bool running = true;
     SDL_Event event;
 
-    auto content = img(renderer,"C:\\Users\\temal\\Downloads\\avatar.png");
+    auto content = img(renderer, "C:\\Users\\temal\\Downloads\\avatar.png");
     bool dragging = false;
-    float rel_x, rel_y;
-    while (running) {
 
+    while (running) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) running = false;
             if (event.type == SDL_EVENT_KEY_DOWN &&
                 event.key.key == SDLK_ESCAPE) running = false;
+
             // zooming
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y > 0)
                 content.zoomin(50);
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
                 content.zoomout(50);
+
             // moving
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT && !dragging) {
-                dragging = true;
-                SDL_GetMouseState(&rel_x, &rel_y);
-                if (content.in_image_box(rel_x,rel_y))
-                    SDL_HideCursor();
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
+                event.button.button == SDL_BUTTON_LEFT && !dragging) {
+                float mx, my;
+                SDL_GetMouseState(&mx, &my);
+                if (content.in_image_box(mx, my)) {
+                    dragging = true;
+                    content.begin_drag(mx, my);
+                }
             }
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT && dragging) {
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_UP &&
+                event.button.button == SDL_BUTTON_LEFT && dragging) {
                 dragging = false;
-                //rel_x = 0;
-                //rel_y = 0;
-                SDL_ShowCursor();
             }
 
             if (dragging) {
                 float x, y;
                 SDL_GetMouseState(&x, &y);
-                content.place_to(x, y,static_cast<int>(rel_x), static_cast<int>(rel_y));
+                content.place_to(x, y);
             }
         }
 
-        // Transparent background (alpha = 0)
         SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 

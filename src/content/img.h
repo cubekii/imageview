@@ -8,8 +8,10 @@ private:
     std::string url;
     SDL_Texture* texture;
     SDL_FRect rect;
+    float drag_offset_x = 0.0f;
+    float drag_offset_y = 0.0f;
 public:
-    img(SDL_Renderer* renderer,std::string url);
+    img(SDL_Renderer* renderer, std::string url);
     ~img();
 
     void zoomin();
@@ -17,11 +19,11 @@ public:
     void zoomin(const float& speed);
     void zoomout(const float& speed);
 
-    void place_to(const int& x, const int& y, const int& rel_x, const int& rel_y);
+    void begin_drag(const float& mx, const float& my);
+    void place_to(const float& x, const float& y);
     void put_image(SDL_Renderer* renderer);
 
-    bool in_image_box(const int& x, const int& y);
+    bool in_image_box(const float& x, const float& y);
 private:
     bool is_avaliable_size(const float& size);
 };
-
