@@ -21,8 +21,8 @@ img::img(SDL_Renderer *renderer, std::string url) {
     render(renderer, url);
 }
 
-bool img::is_avaliable_size(const float& size) {
-    return rect.h - size > 0.0f || rect.w - size > 0.0f;
+bool img::is_avaliable_size(const float& factor) {
+    return (rect.w / factor) > 10.0f && (rect.h / factor) > 10.0f;
 }
 
 void img::zoomin() {
@@ -42,19 +42,28 @@ void img::zoomout() {
 }
 
 void img::zoomin(const float& speed) {
-    rect.x -= speed / 2.0f;
-    rect.y -= speed / 2.0f;
-    rect.w += speed;
-    rect.h += speed;
+    float aspect = rect.w / rect.h;
+    float dh = speed;
+    float dw = speed * aspect;
+
+    rect.x -= dw / 2.0f;
+    rect.y -= dh / 2.0f;
+    rect.w += dw;
+    rect.h += dh;
 }
 
 void img::zoomout(const float& speed) {
     if (!is_avaliable_size(10.0f))
         return;
-    rect.x += speed / 2.0f;
-    rect.y += speed / 2.0f;
-    rect.w -= speed;
-    rect.h -= speed;
+
+    float aspect = rect.w / rect.h;
+    float dh = speed;
+    float dw = speed * aspect;
+
+    rect.x += dw / 2.0f;
+    rect.y += dh / 2.0f;
+    rect.w -= dw;
+    rect.h -= dh;
 }
 
 void img::begin_drag(const float& mx, const float& my) {
