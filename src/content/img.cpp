@@ -1,6 +1,6 @@
 #include "img.h"
 
-img::img(SDL_Renderer* renderer, std::string url) {
+void img::render(SDL_Renderer* renderer, std::string url) {
     texture = IMG_LoadTexture(renderer, url.c_str());
 
     float imgW, imgH;
@@ -15,6 +15,10 @@ img::img(SDL_Renderer* renderer, std::string url) {
         imgW,
         imgH
     };
+}
+
+img::img(SDL_Renderer *renderer, std::string url) {
+    render(renderer, url);
 }
 
 bool img::is_avaliable_size(const float& size) {

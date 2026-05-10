@@ -14,6 +14,8 @@ public:
     img(SDL_Renderer* renderer, std::string url);
     ~img();
 
+    void render(SDL_Renderer* renderer, std::string url);
+
     void zoomin();
     void zoomout();
     void zoomin(const float& speed);
