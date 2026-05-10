@@ -4,7 +4,7 @@
 
 class listdir {
 private:
-    std::string current_file;
+    uint32_t current_file;
     std::string path;
     std::vector<std::string> files;
 
