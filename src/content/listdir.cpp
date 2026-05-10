@@ -31,9 +31,20 @@ std::string listdir::get_current_file() const {
 }
 
 std::string listdir::scroll_up() {
-    return "";
+    if (current_file + 1 < files.size())
+        return path + files[current_file++];
+    else {
+        current_file = 0;
+        return get_current_file();
+    }
 }
 
 std::string listdir::scroll_down() {
-    return "";
+    if (current_file==0) {
+        current_file = files.size()-1;
+        return get_current_file();
+    } else {
+        current_file--;
+        return get_current_file();
+    }
 }

@@ -43,6 +43,12 @@ int main(int argc, char* argv[]) {
                 content.zoomin(50);
             if (event.type == SDL_EVENT_MOUSE_WHEEL && event.wheel.y < 0)
                 content.zoomout(50);
+            //scroll content
+            if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_L)
+                content.render(renderer, current_dir.scroll_up());
+
+            if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_H)
+                content.render(renderer, current_dir.scroll_down());
 
             // moving
             if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
