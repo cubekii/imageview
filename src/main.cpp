@@ -2,7 +2,13 @@
 #include <SDL3_image/SDL_image.h>
 #include <content/img.h>
 
-int main(int argv, char** argc) {
+int main(int argc, char* argv[]) {
+    if (argc<2) {
+        SDL_Log("No arguments provided");
+        return 0;
+    }
+    else
+        SDL_Log("%s", argv[1]);
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_WindowFlags flags =
@@ -22,7 +28,7 @@ int main(int argv, char** argc) {
     bool running = true;
     SDL_Event event;
 
-    auto content = img(renderer, "C:\\Users\\temal\\Downloads\\avatar.png");
+    auto content = img(renderer, argv[1]);
     bool dragging = false;
 
     while (running) {
