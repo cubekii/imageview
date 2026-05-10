@@ -7,13 +7,10 @@ int main(int argc, char* argv[]) {
         SDL_Log("No arguments provided");
         return 0;
     }
-    else
-        SDL_Log("%s", argv[1]);
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_WindowFlags flags =
         SDL_WINDOW_BORDERLESS    |
-        SDL_WINDOW_ALWAYS_ON_TOP |
         SDL_WINDOW_TRANSPARENT;
 
     SDL_DisplayID display = SDL_GetPrimaryDisplay();
