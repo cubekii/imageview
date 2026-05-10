@@ -1,6 +1,6 @@
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
 #include <content/img.h>
+#include <content/listdir.h>
 
 int main(int argc, char* argv[]) {
     if (argc<2) {
@@ -28,7 +28,8 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
 
-    auto content = img(renderer, argv[1]);
+    auto current_dir = listdir(argv[1]);
+    auto content = img(renderer, current_dir.get_current_file());
     bool dragging = false;
 
     while (running) {
