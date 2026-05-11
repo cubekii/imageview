@@ -1,6 +1,7 @@
 #include "listdir.h"
 #include <vector>
 #include <filesystem>
+#include <cstdint>
 
 namespace fs = std::filesystem;
 
