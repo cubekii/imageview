@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest,      compiler: Clang }
-          - { os: ubuntu-24.04-arm,   compiler: Clang }
-          - { os: windows-latest,     compiler: Clang }
-          - { os: windows-11-arm64,   compiler: Clang }
+          - { os: ubuntu-latest,      compiler: GCC }
+          - { os: ubuntu-24.04-arm,   compiler: GCC }
+          - { os: windows-latest,     compiler: MSVC }
+          - { os: windows-11-arm64,   compiler: MSVC }
           - { os: macos-15,           compiler: Clang }
 
     steps:
@@ -31,6 +31,14 @@ jobs:
         run: |
           sudo apt update
           sudo apt-get install -y cmake build-essential ninja-build
+          
+      - name: Install GCC (Linux)
+        if: matrix.compiler == 'GCC' && runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc g++
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
 
       - name: Install Clang 22 (Linux)
         if: matrix.compiler == 'Clang' && runner.os == 'Linux'
@@ -55,6 +63,10 @@ jobs:
           choco install llvm -y
           echo "CC=clang" >> $env:GITHUB_ENV
           echo "CXX=clang++" >> $env:GITHUB_ENV
+          
+      - name: Setup MSVC (Windows)
+        if: matrix.compiler == 'MSVC' && runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: cmake gen ${{ runner.os }}
         run: cmake -B build -GNinja
