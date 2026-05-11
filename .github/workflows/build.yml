@@ -8,7 +8,6 @@ on:
     branches:
       - main
 
-
 jobs:
   test_builds:
     name: ${{ matrix.os }} (${{ matrix.compiler }})
@@ -17,47 +16,48 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest,     compiler: Clang }
-          - { os: ubuntu-24.04-arm,  compiler: Clang }
-          - { os: windows-latest,    compiler: Clang }
-          - { os: windows-11-arm,    compiler: Clang }
-          - { os: macos-26,          compiler: Clang }
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v5
+          - { os: ubuntu-latest,      compiler: Clang }
+          - { os: ubuntu-24.04-arm,   compiler: Clang }
+          - { os: windows-latest,     compiler: Clang }
+          - { os: windows-11-arm64,   compiler: Clang }
+          - { os: macos-15,           compiler: Clang }
 
-        - name: Install deps (Linux)
-          if: runner.os == 'Linux'
-          run: |
-            sudo apt update
-            sudo apt-get install -y cmake build-essential ninja-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Install Clang 22 (Linux)
-          if: matrix.compiler == 'Clang' && runner.os == 'Linux'
-          run: |
-            wget https://apt.llvm.org/llvm.sh
-            chmod +x llvm.sh
-            sudo ./llvm.sh 22 all
-            echo "CC=clang-22" >> $GITHUB_ENV
-            echo "CXX=clang++-22" >> $GITHUB_ENV
+      - name: Install deps (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt-get install -y cmake build-essential ninja-build
 
-        - name: Setup Clang (macOS)
-          if: matrix.compiler == 'Clang' && runner.os == 'macOS'
-          run: |
-            brew install llvm
-            LLVM_PREFIX=$(brew --prefix llvm)
-            echo "CC=${LLVM_PREFIX}/bin/clang" >> $GITHUB_ENV
-            echo "CXX=${LLVM_PREFIX}/bin/clang++" >> $GITHUB_ENV
-        
-        - name: Setup Clang (Windows)
-          if: matrix.compiler == 'Clang' && runner.os == 'Windows'
-          run: |
-            choco install llvm -y
-            echo "CC=clang" >> $env:GITHUB_ENV
-            echo "CXX=clang++" >> $env:GITHUB_ENV
+      - name: Install Clang 22 (Linux)
+        if: matrix.compiler == 'Clang' && runner.os == 'Linux'
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 22 all
+          echo "CC=clang-22" >> $GITHUB_ENV
+          echo "CXX=clang++-22" >> $GITHUB_ENV
 
-        - name: cmake gen ${{ runner.os }}
-          run: cmake -B build -GNinja
+      - name: Setup Clang (macOS)
+        if: matrix.compiler == 'Clang' && runner.os == 'macOS'
+        run: |
+          brew install llvm
+          LLVM_PREFIX=$(brew --prefix llvm)
+          echo "CC=${LLVM_PREFIX}/bin/clang" >> $GITHUB_ENV
+          echo "CXX=${LLVM_PREFIX}/bin/clang++" >> $GITHUB_ENV
 
-        - name: Build executable ${{ runner.os }}
-          run: cmake --build build
+      - name: Setup Clang (Windows)
+        if: matrix.compiler == 'Clang' && runner.os == 'Windows'
+        run: |
+          choco install llvm -y
+          echo "CC=clang" >> $env:GITHUB_ENV
+          echo "CXX=clang++" >> $env:GITHUB_ENV
+
+      - name: cmake gen ${{ runner.os }}
+        run: cmake -B build -GNinja
+
+      - name: Build executable ${{ runner.os }}
+        run: cmake --build build
