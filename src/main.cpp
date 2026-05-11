@@ -1,4 +1,5 @@
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 #include <content/img.h>
 #include <content/listdir.h>
 

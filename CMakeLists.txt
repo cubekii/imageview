@@ -22,6 +22,12 @@ auib_import(SDL3_image https://github.com/libsdl-org/SDL_image
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.h)
 add_executable(imageview ${SOURCES})
 
+if(WIN32)
+    set_target_properties(imageview PROPERTIES
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
+
 target_link_libraries(imageview PRIVATE
         SDL3::SDL3
         SDL3_image::SDL3_image
