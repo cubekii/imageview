@@ -18,9 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest,      compiler: Clang,  artifact: linux-x64   }
+          - { os: ubuntu-latest,      compiler: Clang,  artifact: linux-amd64   }
           - { os: ubuntu-24.04-arm,   compiler: Clang,  artifact: linux-arm64 }
-          - { os: windows-latest,     compiler: MSVC,   artifact: windows-x64 }
+          - { os: windows-latest,     compiler: MSVC,   artifact: windows-amd64 }
+          - { os: windows-11-arm,     compiler: MSVC,   artifact: windows-arm64 }
           - { os: macos-15,           compiler: Clang,  artifact: macos-arm64 }
 
     steps:
@@ -31,11 +32,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt update
-          sudo apt-get install -y cmake build-essential ninja-build \
-            libjack-jackd2-dev libpipewire-0.3-dev libpulse-dev libsndio-dev \
-            libx11-dev libfribidi-dev libthai-dev libgl-dev libgles-dev \
-            libdrm-dev libgbm-dev libwayland-dev libxkbcommon-dev \
-            libegl-dev libwayland-egl-backend-dev
+          sudo apt-get install -y \
+          cmake build-essential ninja-build \
+          libx11-dev libgl-dev \
+          libwayland-dev libxkbcommon-dev libwayland-egl-backend-dev \
+          libpulse-dev
 
       - name: Install GCC (Linux)
         if: matrix.compiler == 'GCC' && runner.os == 'Linux'
@@ -97,7 +98,7 @@ jobs:
         with:
           name: build-${{ matrix.artifact }}
           path: staging/
-          retention-days: 7
+          retention-days: 30
           if-no-files-found: error
 
   release:
@@ -112,9 +113,10 @@ jobs:
     strategy:
       matrix:
         artifact:
-          - linux-x64
+          - linux-amd64
           - linux-arm64
-          - windows-x64
+          - windows-amd64
+          - windows-arm64
           - macos-arm64
 
     steps:
