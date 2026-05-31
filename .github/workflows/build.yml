@@ -18,11 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest,      compiler: Clang,  artifact: linux-amd   }
-          - { os: ubuntu-24.04-arm,   compiler: Clang,  artifact: linux-arm64 }
+          - { os: ubuntu-latest,      compiler: Clang,  artifact: linux-amd64   }
+          - { os: ubuntu-24.04-arm,   compiler: Clang,  artifact: linux-arm64   }
           - { os: windows-latest,     compiler: MSVC,   artifact: windows-amd64 }
-          - { os: windows-11-arm,     compiler: MSVC,   artifact: windows-arm64 }
-          - { os: macos-15,           compiler: Clang,  artifact: macos-arm64 }
+          - { os: macos-15,           compiler: Clang,  artifact: macos-arm64   }
 
     steps:
       - name: Checkout
@@ -69,7 +68,7 @@ jobs:
           choco install llvm -y
           echo "CC=clang" >> $env:GITHUB_ENV
           echo "CXX=clang++" >> $env:GITHUB_ENV
-          
+
       - name: Setup MSVC (Windows)
         if: matrix.compiler == 'MSVC' && runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
@@ -99,43 +98,32 @@ jobs:
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           name: build-${{ matrix.artifact }}
           path: staging/
           retention-days: 7
           if-no-files-found: error
 
-  release:
-    name: Attach binaries to release
-    if: github.event_name == 'release' && github.event.action == 'created'
-    needs: test_builds
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    strategy:
-      matrix:
-        artifact:
-          - linux-amd64
-          - linux-arm64
-          - windows-amd64
-          - windows-arm64
-          - macos-arm64
-
-    steps:
-      - name: Download build artifact — ${{ matrix.artifact }}
-        uses: actions/download-artifact@v4
-        with:
-          name: build-${{ matrix.artifact }}
-          path: dist/${{ matrix.artifact }}
-
-      - name: Archive binaries
+      - name: Archive release binaries (Linux / macOS)
+        if: github.event_name == 'release' && runner.os != 'Windows'
         run: |
-          cd dist
-          zip -r "../${{ matrix.artifact }}.zip" "${{ matrix.artifact }}/"
+          cd staging
+          tar -czf ../${{ matrix.artifact }}.tar.gz .
 
-      - name: Upload to release
+      - name: Archive release binaries (Windows)
+        if: github.event_name == 'release' && runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -Path staging\* -DestinationPath ${{ matrix.artifact }}.zip
+
+      - name: Upload to release (Linux / macOS)
         uses: softprops/action-gh-release@v2
+        if: github.event_name == 'release' && runner.os != 'Windows'
+        with:
+          files: ${{ matrix.artifact }}.tar.gz
+
+      - name: Upload to release (Windows)
+        uses: softprops/action-gh-release@v2
+        if: github.event_name == 'release' && runner.os == 'Windows'
         with:
           files: ${{ matrix.artifact }}.zip
