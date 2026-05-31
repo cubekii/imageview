@@ -21,6 +21,7 @@ jobs:
           - { os: ubuntu-latest,      compiler: Clang,  artifact: linux-x64   }
           - { os: ubuntu-24.04-arm,   compiler: Clang,  artifact: linux-arm64 }
           - { os: windows-latest,     compiler: MSVC,   artifact: windows-x64 }
+          - { os: windows-11-arm,     compiler: MSVC,   artifact: windows-arm64 }
           - { os: macos-15,           compiler: Clang,  artifact: macos-arm64 }
 
     steps:
@@ -115,6 +116,7 @@ jobs:
           - linux-x64
           - linux-arm64
           - windows-x64
+          - windows-arm64
           - macos-arm64
 
     steps:
