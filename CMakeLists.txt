@@ -18,6 +18,11 @@ auib_import(SDL3 https://github.com/libsdl-org/SDL
 auib_import(SDL3_image https://github.com/libsdl-org/SDL_image
         VERSION fcb9d0b15f6bc4e22e9badedc5cdccee92eddcf4)
 
+if(WIN32 AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+    auib_import(DAV1D https://github.com/videolan/dav1d
+        VERSION 62501cc7db378532d7e85ea434b70d57e1ba2cb0)
+endif()
+
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.h)
 add_executable(imageview ${SOURCES})
@@ -26,6 +31,10 @@ if(WIN32)
     set_target_properties(imageview PROPERTIES
         WIN32_EXECUTABLE TRUE
     )
+
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+        target_link_libraries(imageview PRIVATE dav1d::dav1d)
+    endif()
 endif()
 
 target_link_libraries(imageview PRIVATE
